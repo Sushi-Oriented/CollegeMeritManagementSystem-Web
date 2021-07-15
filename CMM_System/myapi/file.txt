@@ -1,0 +1,43 @@
+<?php
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+require 'vendor/autoload.php';
+require 'db.php';
+$app = new \Slim\App;
+//API #0 root doc
+$app->get('/', function (Request $request, Response $response, array $args) {
+    $response->getBody()->write("Hello there from root");
+    return $response;
+});
+//API GET #1-all user
+$app->get('/user', function (Request $request, Response $response, array $args) {
+    $response->getBody()->write("get all user");
+    return $response;
+});
+//API GET #2-single user
+$app->get('/user/{id}', function (Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $response->getBody()->write("get single user based on id=$id");
+    return $response;
+});
+
+// API #3 POST
+$app->post('/user', function (Request $request, Response $response, array $args) {
+    $allPostPutVars = $request->getParsedBody();
+    $data = $allPostPutVars['name'];
+    $response->getBody()->write("api to post a single user $data");
+    return $response;
+});
+// API #4 UPDATE
+$app->put('/user/{id}', function (Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $response->getBody()->write("api to update a user with id=$id");
+    return $response;
+});
+//API #5 DELETE
+$app->delete('/user/{id}', function (Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $response->getBody()->write("api to delete a user with id=$id");
+    return $response;
+});
+$app->run();
